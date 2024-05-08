@@ -1,7 +1,9 @@
 package com.project.quotamanagement.quotamanagement.service.impl;
 
-import com.project.quotamanagement.quotamanagement.mapper.QuotaAccountMapper;
-import com.project.quotamanagement.quotamanagement.mapper.UserMapper;
+import com.project.quotamanagement.quotamanagement.mapper.QuotaAccountDOMapper;
+import com.project.quotamanagement.quotamanagement.mapper.UserDOMapper;
+import com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO;
+import com.project.quotamanagement.quotamanagement.mapper.dos.UserDO;
 import com.project.quotamanagement.quotamanagement.model.AccountOrder;
 import com.project.quotamanagement.quotamanagement.model.QuotaAccount;
 import com.project.quotamanagement.quotamanagement.model.User;
@@ -12,20 +14,23 @@ import com.project.quotamanagement.quotamanagement.model.enums.QuotaAccountStatu
 import com.project.quotamanagement.quotamanagement.service.AccountOrderService;
 import com.project.quotamanagement.quotamanagement.service.QuotaCommandService;
 import com.project.quotamanagement.quotamanagement.util.DateUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+@Service
 public class QuotaCommandServiceImpl implements QuotaCommandService {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserDOMapper userDOMapper;
 
     @Autowired
-    private QuotaAccountMapper quotaAccountMapper;
+    private QuotaAccountDOMapper quotaAccountDOMapper;
 
     @Autowired
     private AccountOrderService accountOrderService;
@@ -35,22 +40,23 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
     public void applyQuota(long userId, String quotaAccountType, long totalQuota, String accountNo) throws Exception {
 
         // 锁账户
-        User user = userMapper.lockById(userId);
-        if (Objects.isNull(user)) {
+        UserDO userDO = userDOMapper.lockById(userId);
+
+        if (Objects.isNull(userDO)) {
             throw new Exception("传入的用户id无效");
         }
 
         // 检查当前是否有此类额度
-        QuotaAccount quotaAccount = quotaAccountMapper.getByAccountNo(accountNo);
+        QuotaAccountDO quotaAccountDO = quotaAccountDOMapper.getByAccountNo(accountNo);
 
-        if (Objects.isNull(quotaAccount)) {
+        if (Objects.isNull(quotaAccountDO)) {
 
             // 直接新增
             addQuotaAccount(userId, quotaAccountType, totalQuota, accountNo);
         } else {
 
             // 检查是否是该用户的账户
-            if (quotaAccount.getUserId() != userId) {
+            if (quotaAccountDO.getUserId() != userId) {
                 throw new Exception("该账户和用户id不匹配！");
             }
 
@@ -79,7 +85,7 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         quotaAccount.setReserveQuota(quotaAccount.getReserveQuota() + usedQuota);
         quotaAccount.setUsedQuota(quotaAccount.getUsedQuota() + usedQuota);
 
-        quotaAccountMapper.updateQuotaAccount(quotaAccount);
+        updateQuotaAccount(quotaAccount);
 
         // 创造单据
         accountOrderService.createAccountOrder(buildOrder(quotaAccount, AccountOrderTypeEnum.OCCUPIED, usedQuota, outBizNo));
@@ -105,7 +111,7 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         quotaAccount.setUsedQuota(quotaAccount.getUsedQuota() - restoredQuota);
         quotaAccount.setReserveQuota(quotaAccount.getReserveQuota() + restoredQuota);
 
-        quotaAccountMapper.updateQuotaAccount(quotaAccount);
+        updateQuotaAccount(quotaAccount);
 
         // 创造单据
         accountOrderService.createAccountOrder(buildOrder(quotaAccount, AccountOrderTypeEnum.RELEASE, restoredQuota, outBizNo));
@@ -133,10 +139,13 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
     }
 
     private QuotaAccount lockQuotaAccount(String accountNo) throws Exception {
-        QuotaAccount quotaAccount = quotaAccountMapper.lockByAccountNo(accountNo);
-        if (Objects.isNull(quotaAccount)) {
+        QuotaAccountDO quotaAccountDO = quotaAccountDOMapper.lockByAccountNo(accountNo);
+        if (Objects.isNull(quotaAccountDO)) {
             throw new Exception("额度账户加锁失败");
         }
+
+        QuotaAccount quotaAccount = new QuotaAccount();
+        BeanUtils.copyProperties(quotaAccountDO, quotaAccount);
 
         return quotaAccount;
     }
@@ -153,12 +162,20 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         quotaAccount.setQuotaUpperLimit(totalQuota);
         quotaAccount.setReserveQuota(totalQuota - quotaAccount.getUsedQuota());
 
-        quotaAccountMapper.updateQuotaAccount(quotaAccount);
+        updateQuotaAccount(quotaAccount);
+    }
+
+    private void updateQuotaAccount(QuotaAccount quotaAccount) {
+
+        QuotaAccountDO quotaAccountDO = new QuotaAccountDO();
+        BeanUtils.copyProperties(quotaAccount, quotaAccountDO);
+        quotaAccountDOMapper.updateByPrimaryKey(quotaAccountDO);
+
     }
 
     private void addQuotaAccount(long userId, String quotaAccountType, long totalQuota, String accountNo) {
 
-        QuotaAccount quotaAccount = new QuotaAccount();
+        QuotaAccountDO quotaAccount = new QuotaAccountDO();
         quotaAccount.setTntInstId(QuotaManagementConstants.DEFAULT_TNT_INST_ID);
         quotaAccount.setAccountNo(accountNo);
         quotaAccount.setAccountType(quotaAccountType);
@@ -169,6 +186,6 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         quotaAccount.setUsedQuota(QuotaManagementConstants.DEFAULT_USED_QUOTA);
         quotaAccount.setReserveQuota(totalQuota);
 
-        quotaAccountMapper.insertQuotaAccount(quotaAccount);
+        quotaAccountDOMapper.insert(quotaAccount);
     }
 }

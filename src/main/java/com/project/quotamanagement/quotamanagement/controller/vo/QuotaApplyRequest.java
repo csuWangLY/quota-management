@@ -13,7 +13,7 @@ public class QuotaApplyRequest extends BaseRequest {
     /**
      * 用户id
      */
-    private long userAccountId;
+    private long userId;
 
     /**
      * 额度账户类型
@@ -24,4 +24,9 @@ public class QuotaApplyRequest extends BaseRequest {
      * 目标总额度
      */
     private long totalQuota;
+
+    /**
+     * 账号
+     */
+    private String accountNo;
 }

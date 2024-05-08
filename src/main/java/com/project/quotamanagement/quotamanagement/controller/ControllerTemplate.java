@@ -4,7 +4,7 @@ public interface ControllerTemplate {
     /**
      * 检查
      */
-    void check();
+    void check() throws Exception;
 
     /**
      * 执行

@@ -1,6 +1,5 @@
 package com.project.quotamanagement.quotamanagement.controller.vo;
 
-import com.project.quotamanagement.quotamanagement.controller.vo.QuotaAccountVO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

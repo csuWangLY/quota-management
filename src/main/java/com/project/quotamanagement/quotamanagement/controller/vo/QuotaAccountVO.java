@@ -11,39 +11,58 @@ import lombok.ToString;
 @Getter
 @ToString
 public class QuotaAccountVO {
+    /**
+     * 租户id
+     */
+    private String tntInstId;
 
     /**
-     * 额度账户类型
+     * 创建日期
      */
-    private String quotaAccountType;
+    private java.sql.Timestamp gmtCreate;
 
     /**
-     * 额度账户号码
+     * 修改时间
      */
-    private String quotaAccountNo;
+    private java.sql.Timestamp gmtModified;
+
+    /**
+     * 账号
+     */
+    private String accountNo;
+
+    /**
+     * 账户类型
+     */
+    private String accountType;
 
     /**
      * 用户id
      */
-    private long userAccountId;
+    private Long userId;
 
     /**
-     * 总额度
+     * 状态
      */
-    private long totalQuota;
+    private String status;
 
     /**
-     * 已占用额度
+     * 币种
      */
-    private long occupiedQuota;
+    private String currency;
 
     /**
-     * 可用额度
+     * 额度上限
      */
-    private long availableQuota;
+    private Long quotaUpperLimit;
 
     /**
-     * 生效状态
+     * 已使用额度
      */
-    private boolean effectiveMode;
+    private Long usedQuota;
+
+    /**
+     * 剩余额度
+     */
+    private Long reserveQuota;
 }

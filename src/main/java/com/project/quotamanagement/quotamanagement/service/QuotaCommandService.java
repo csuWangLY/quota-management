@@ -1,8 +1,5 @@
 package com.project.quotamanagement.quotamanagement.service;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public interface QuotaCommandService {
 
     /**

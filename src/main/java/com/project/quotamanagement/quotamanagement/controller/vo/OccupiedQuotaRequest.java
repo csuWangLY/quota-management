@@ -13,15 +13,20 @@ public class OccupiedQuotaRequest extends BaseRequest {
     /**
      * 用户id
      */
-    private long userAccountId;
+    private long userId;
 
     /**
      * 额度账户类型
      */
-    private String quotaAccountType;
+    private String accountNo;
 
     /**
      * 占用额度
      */
     private long occupiedQuota;
+
+    /**
+     * 外部id
+     */
+    private String outBizNo;
 }

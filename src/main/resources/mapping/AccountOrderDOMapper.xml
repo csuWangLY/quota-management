@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.quotamanagement.quotamanagement.mapper.AccountOrderDOMapper">
+  <resultMap id="BaseResultMap" type="com.project.quotamanagement.quotamanagement.mapper.dos.AccountOrderDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tnt_inst_id" jdbcType="VARCHAR" property="tntInstId" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="debit_account_no" jdbcType="VARCHAR" property="debitAccountNo" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="trade_type" jdbcType="VARCHAR" property="tradeType" />
+    <result column="trade_amount" jdbcType="BIGINT" property="tradeAmount" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="out_biz_no" jdbcType="VARCHAR" property="outBizNo" />
+    <result column="biz_time" jdbcType="TIMESTAMP" property="bizTime" />
+    <result column="biz_date" jdbcType="TIMESTAMP" property="bizDate" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tnt_inst_id, gmt_create, gmt_modified, debit_account_no, user_id, trade_type, 
+    trade_amount, status, out_biz_no, biz_time, biz_date, account_type, currency
+  </sql>
+  <!-- 查询交易信息通过ID -->
+  <select id="getByOutBizNo" resultMap="BaseResultMap">
+    SELECT
+    id,
+    tnt_inst_id,
+    gmt_create,
+    gmt_modified,
+    debit_account_no,
+    user_id,
+    trade_type,
+    trade_amount,
+    status,
+    out_biz_no,
+    biz_time,
+    biz_date,
+    account_type,
+    currency
+    FROM
+    account_order
+    WHERE
+    out_biz_no = #{outBizNo}
+  </select>
+</mapper>

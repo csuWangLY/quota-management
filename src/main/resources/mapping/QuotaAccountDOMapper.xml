@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.quotamanagement.quotamanagement.mapper.QuotaAccountDOMapper">
+  <resultMap id="BaseResultMap" type="com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="tnt_inst_id" jdbcType="VARCHAR" property="tntInstId" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="account_no" jdbcType="VARCHAR" property="accountNo" />
+    <result column="account_type" jdbcType="VARCHAR" property="accountType" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="quota_upper_limit" jdbcType="BIGINT" property="quotaUpperLimit" />
+    <result column="used_quota" jdbcType="BIGINT" property="usedQuota" />
+    <result column="reserve_quota" jdbcType="BIGINT" property="reserveQuota" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, tnt_inst_id, gmt_create, gmt_modified, account_no, account_type, user_id, status, 
+    currency, quota_upper_limit, used_quota, reserve_quota
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from quota_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from quota_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO">
+    insert into quota_account (id, tnt_inst_id, gmt_create, 
+      gmt_modified, account_no, account_type, 
+      user_id, status, currency, 
+      quota_upper_limit, used_quota, reserve_quota
+      )
+    values (#{id,jdbcType=BIGINT}, #{tntInstId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{accountNo,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR}, 
+      #{userId,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, 
+      #{quotaUpperLimit,jdbcType=BIGINT}, #{usedQuota,jdbcType=BIGINT}, #{reserveQuota,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO">
+    insert into quota_account
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tntInstId != null">
+        tnt_inst_id,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="accountNo != null">
+        account_no,
+      </if>
+      <if test="accountType != null">
+        account_type,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="quotaUpperLimit != null">
+        quota_upper_limit,
+      </if>
+      <if test="usedQuota != null">
+        used_quota,
+      </if>
+      <if test="reserveQuota != null">
+        reserve_quota,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="tntInstId != null">
+        #{tntInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountNo != null">
+        #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="quotaUpperLimit != null">
+        #{quotaUpperLimit,jdbcType=BIGINT},
+      </if>
+      <if test="usedQuota != null">
+        #{usedQuota,jdbcType=BIGINT},
+      </if>
+      <if test="reserveQuota != null">
+        #{reserveQuota,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO">
+    update quota_account
+    <set>
+      <if test="tntInstId != null">
+        tnt_inst_id = #{tntInstId,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="accountNo != null">
+        account_no = #{accountNo,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null">
+        account_type = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="quotaUpperLimit != null">
+        quota_upper_limit = #{quotaUpperLimit,jdbcType=BIGINT},
+      </if>
+      <if test="usedQuota != null">
+        used_quota = #{usedQuota,jdbcType=BIGINT},
+      </if>
+      <if test="reserveQuota != null">
+        reserve_quota = #{reserveQuota,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO">
+    update quota_account
+    set tnt_inst_id = #{tntInstId,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      account_no = #{accountNo,jdbcType=VARCHAR},
+      account_type = #{accountType,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=BIGINT},
+      status = #{status,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      quota_upper_limit = #{quotaUpperLimit,jdbcType=BIGINT},
+      used_quota = #{usedQuota,jdbcType=BIGINT},
+      reserve_quota = #{reserveQuota,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <!-- 根据条件查询额度账户信息 -->
+  <select id="queryByCondition" parameterType="java.util.Map" resultType="com.example.model.QuotaAccount">
+    SELECT
+    id,
+    tnt_inst_id,
+    gmt_create,
+    gmt_modified,
+    account_no,
+    account_type,
+    user_id,
+    status,
+    currency,
+    quota_upper_limit,
+    used_quota,
+    reserve_quota
+    FROM
+    quota_account
+    WHERE
+    <if test="userId != null">
+      user_id = #{userId}
+    </if>
+    <if test="quotaAccountType != null">
+      AND account_type = #{quotaAccountType}
+    </if>
+  </select>
+
+  <!-- 查询额度账户信息通过ID -->
+  <select id="lockByAccountNo" resultMap="BaseResultMap">
+    SELECT
+    id,
+    tnt_inst_id,
+    gmt_create,
+    gmt_modified,
+    account_no,
+    account_type,
+    user_id,
+    status,
+    currency,
+    quota_upper_limit,
+    used_quota,
+    reserve_quota
+    FROM
+    quota_account
+    WHERE
+    account_no = #{accountNo}
+    FOR UPDATE
+  </select>
+
+  <!-- 查询额度账户信息通过ID -->
+  <select id="getByAccountNo" resultMap="BaseResultMap">
+    SELECT
+    id,
+    tnt_inst_id,
+    gmt_create,
+    gmt_modified,
+    account_no,
+    account_type,
+    user_id,
+    status,
+    currency,
+    quota_upper_limit,
+    used_quota,
+    reserve_quota
+    FROM
+    quota_account
+    WHERE
+    account_no = #{accountNo}
+  </select>
+
+</mapper>

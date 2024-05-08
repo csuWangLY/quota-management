@@ -5,6 +5,7 @@ import com.project.quotamanagement.quotamanagement.controller.vo.QuotaApplyReque
 import com.project.quotamanagement.quotamanagement.controller.vo.ReleaseQuotaRequest;
 import com.project.quotamanagement.quotamanagement.controller.vo.base.CommonResult;
 import com.project.quotamanagement.quotamanagement.service.QuotaCommandService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -34,14 +35,16 @@ public class QuotaManagementCommandController extends CommonController {
 
         CommonResult result = execute(new ControllerTemplate() {
             @Override
-            public void check() {
-
+            public void check() throws Exception {
                 // 请求校验、鉴权
+                if (request.getOccupiedQuota() <= 0 || Strings.isBlank(request.getOutBizNo()) || Strings.isBlank(request.getAccountNo()) || Strings.isBlank(request.getOutBizNo())) {
+                    throw new Exception("请求字段不合法");
+                }
             }
 
             @Override
             public void execute() throws Exception {
-                quotaCommandService.occupiedQuota(request.getUserAccountId(), request.getQuotaAccountType(), request.getOccupiedQuota());
+                quotaCommandService.occupiedQuota(request.getUserId(), request.getAccountNo(), request.getOccupiedQuota(), request.getOutBizNo());
             }
         });
 
@@ -60,14 +63,16 @@ public class QuotaManagementCommandController extends CommonController {
 
         CommonResult result = execute(new ControllerTemplate() {
             @Override
-            public void check() {
-
+            public void check() throws Exception {
                 // 请求校验、鉴权
+                if (request.getReleaseQuota() <= 0 || Strings.isBlank(request.getOutBizNo()) || Strings.isBlank(request.getAccountNo()) || Strings.isBlank(request.getOutBizNo())) {
+                    throw new Exception("请求字段不合法");
+                }
             }
 
             @Override
             public void execute() throws Exception {
-                quotaCommandService.releaseQuota(request.getUserAccountId(), request.getQuotaAccountType(), request.getReleaseQuota());
+                quotaCommandService.releaseQuota(request.getUserAccountId(), request.getAccountNo(), request.getReleaseQuota(), request.getOutBizNo());
             }
         });
 
@@ -85,14 +90,16 @@ public class QuotaManagementCommandController extends CommonController {
     public ResponseEntity<CommonResult> applyQuota(QuotaApplyRequest request) {
         CommonResult result = execute(new ControllerTemplate() {
             @Override
-            public void check() {
-
+            public void check() throws Exception {
                 // 请求校验、鉴权
+                if (request.getTotalQuota() <= 0 || request.getUserId() <= 0 || Strings.isBlank(request.getAccountNo()) || Strings.isBlank(request.getQuotaAccountType())) {
+                    throw new Exception("请求字段不合法");
+                }
             }
 
             @Override
             public void execute() throws Exception {
-                quotaCommandService.applyQuota(request.getUserAccountId(), request.getQuotaAccountType(), request.getTotalQuota());
+                quotaCommandService.applyQuota(request.getUserId(), request.getQuotaAccountType(), request.getTotalQuota(), request.getAccountNo());
             }
         });
 

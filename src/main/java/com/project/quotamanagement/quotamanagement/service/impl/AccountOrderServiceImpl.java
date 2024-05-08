@@ -1,6 +1,7 @@
 package com.project.quotamanagement.quotamanagement.service.impl;
 
-import com.project.quotamanagement.quotamanagement.mapper.AccountOrderMapper;
+import com.project.quotamanagement.quotamanagement.mapper.AccountOrderDOMapper;
+import com.project.quotamanagement.quotamanagement.mapper.dos.AccountOrderDO;
 import com.project.quotamanagement.quotamanagement.model.AccountOrder;
 import com.project.quotamanagement.quotamanagement.service.AccountOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.Objects;
 public class AccountOrderServiceImpl implements AccountOrderService {
 
     @Autowired
-    private AccountOrderMapper accountOrderMapper;
+    private AccountOrderDOMapper accountOrderDOMapper;
 
     @Override
     public void createAccountOrder(AccountOrder order) {
@@ -21,7 +22,7 @@ public class AccountOrderServiceImpl implements AccountOrderService {
 
     @Override
     public boolean judgeIdempotent(String outBizNo) {
-        AccountOrder accountOrder = accountOrderMapper.getByOutBizNo(outBizNo);
+        AccountOrderDO accountOrder = accountOrderDOMapper.getByOutBizNo(outBizNo);
 
         return Objects.nonNull(accountOrder);
     }

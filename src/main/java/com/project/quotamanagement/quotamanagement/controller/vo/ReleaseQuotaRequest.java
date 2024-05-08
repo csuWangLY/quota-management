@@ -16,10 +16,15 @@ public class ReleaseQuotaRequest {
     /**
      * 额度账户类型
      */
-    private String quotaAccountType;
+    private String accountNo;
 
     /**
      * 释放额度
      */
     private long releaseQuota;
+
+    /**
+     * 外部id
+     */
+    private String outBizNo;
 }

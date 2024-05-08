@@ -1,4 +1,5 @@
 package com.project.quotamanagement.quotamanagement.model.converter;
+import java.sql.Timestamp;
 
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaAccountVO;
 import com.project.quotamanagement.quotamanagement.model.QuotaAccount;
@@ -14,12 +15,17 @@ public class QuotaAccountConverter {
 
     public static QuotaAccountVO model2vo(QuotaAccount model) {
         QuotaAccountVO quotaAccountVO = new QuotaAccountVO();
-        quotaAccountVO.setQuotaAccountNo(model.getQuotaAccountNo());
-        quotaAccountVO.setQuotaAccountType(model.getQuotaAccountType());
-        quotaAccountVO.setAvailableQuota(model.getAvailableQuota());
-        quotaAccountVO.setUserAccountId(model.getUserAccountId());
-        quotaAccountVO.setOccupiedQuota(model.getOccupiedQuota());
-        quotaAccountVO.setTotalQuota(model.getTotalQuota());
+        quotaAccountVO.setTntInstId(model.getTntInstId());
+        quotaAccountVO.setGmtCreate(model.getGmtCreate());
+        quotaAccountVO.setGmtModified(model.getGmtModified());
+        quotaAccountVO.setAccountNo(model.getAccountNo());
+        quotaAccountVO.setAccountType(model.getAccountType());
+        quotaAccountVO.setUserId(model.getUserId());
+        quotaAccountVO.setStatus(model.getStatus());
+        quotaAccountVO.setCurrency(model.getCurrency());
+        quotaAccountVO.setQuotaUpperLimit(model.getQuotaUpperLimit());
+        quotaAccountVO.setUsedQuota(model.getUsedQuota());
+        quotaAccountVO.setReserveQuota(model.getReserveQuota());
 
         return quotaAccountVO;
     }
