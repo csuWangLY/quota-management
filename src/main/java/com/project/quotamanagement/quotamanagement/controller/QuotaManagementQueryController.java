@@ -2,8 +2,7 @@ package com.project.quotamanagement.quotamanagement.controller;
 
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaQueryRequest;
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaQueryResponse;
-import com.project.quotamanagement.quotamanagement.controller.vo.base.CommonResult;
-import com.project.quotamanagement.quotamanagement.controller.vo.UserAccountVO;
+import com.project.quotamanagement.quotamanagement.controller.vo.UserVO;
 import com.project.quotamanagement.quotamanagement.model.converter.UserAccountConverter;
 import com.project.quotamanagement.quotamanagement.service.UserAccountRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -44,17 +43,15 @@ public class QuotaManagementQueryController {
         if (!quotaQueryRequestCheck(request)) {
             result.setSuccess(false);
             result.setRetriable(false);
-
-            // to do 身份校验
             return ResponseEntity.ok(result);
         }
 
         LOGGER.info("额度查询开始，查询账户id = {}", request.getUserAccountId());
 
         // 查询
-        UserAccountVO userAccountVO = UserAccountConverter.model2vo(
-                userAccountRepository.accountQuery(request.getUserAccountId(), request.getQuotaAccountType()));
-        result.setUserAccountVO(userAccountVO);
+        UserVO userVO = UserAccountConverter.model2vo(
+                userAccountRepository.userQuery(request.getUserAccountId(), request.getQuotaAccountType()));
+        result.setUserVO(userVO);
 
         return ResponseEntity.ok(result);
     }

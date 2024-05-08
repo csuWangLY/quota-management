@@ -13,5 +13,5 @@ public class QuotaQueryResponse extends CommonResult {
     /**
      * 用户账户
      */
-    private UserAccountVO userAccountVO;
+    private UserVO userVO;
 }

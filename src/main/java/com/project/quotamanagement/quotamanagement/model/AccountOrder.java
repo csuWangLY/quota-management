@@ -1,13 +1,17 @@
 package com.project.quotamanagement.quotamanagement.model;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 @Data // 自动生成 Getter、Setter、toString、equals 和 hashCode 方法
 @NoArgsConstructor // 自动生成无参构造方法
 @AllArgsConstructor // 自动生成全参构造方法
-public class QuotaAccount {
+public class AccountOrder {
     /**
      * 自增id
      */
@@ -21,22 +25,17 @@ public class QuotaAccount {
     /**
      * 创建日期
      */
-    private java.sql.Timestamp gmtCreate;
+    private Date gmtCreate;
 
     /**
      * 修改时间
      */
-    private java.sql.Timestamp gmtModified;
+    private Date gmtModified;
 
     /**
-     * 账号
+     * 出款账号
      */
     private String accountNo;
-
-    /**
-     * 账户类型
-     */
-    private String accountType;
 
     /**
      * 用户id
@@ -44,27 +43,47 @@ public class QuotaAccount {
     private Long userId;
 
     /**
+     * 交易类型
+     */
+    private String tradeType;
+
+    /**
+     * 交易金额
+     */
+    private Long tradeAmount;
+
+    /**
      * 状态
      */
     private String status;
 
     /**
+     * 业务单号
+     */
+    private String bizNo;
+
+    /**
+     * 外部单号
+     */
+    private String outBizNo;
+
+    /**
+     * 业务时间
+     */
+    private Timestamp bizTime;
+
+    /**
+     * 业务日期
+     */
+    private String bizDate;
+
+    /**
+     * 账户类型
+     */
+    private String accountType;
+
+    /**
      * 币种
      */
     private String currency;
-
-    /**
-     * 额度上限
-     */
-    private Long quotaUpperLimit;
-
-    /**
-     * 已使用额度
-     */
-    private Long usedQuota;
-
-    /**
-     * 剩余额度
-     */
-    private Long reserveQuota;
 }

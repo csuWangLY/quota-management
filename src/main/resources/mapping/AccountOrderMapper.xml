@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.quotamanagement.quotamanagement.mapper.AccountOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.example.model.AccountOrder">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="tnt_inst_id" property="tntInstId" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+        <result column="debit_account_no" property="debitAccountNo" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+        <result column="trade_amount" property="tradeAmount" jdbcType="BIGINT" />
+        <result column="status" property="status" jdbcType="VARCHAR" />
+        <result column="out_biz_no" property="outBizNo" jdbcType="VARCHAR" />
+        <result column="biz_time" property="bizTime" jdbcType="TIMESTAMP" />
+        <result column="biz_date" property="bizDate" jdbcType="VARCHAR" />
+        <result column="account_type" property="accountType" jdbcType="VARCHAR" />
+        <result column="currency" property="currency" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 查询交易信息通过ID -->
+    <select id="getAccountOrderById" resultMap="BaseResultMap">
+        SELECT
+        id,
+        tnt_inst_id,
+        gmt_create,
+        gmt_modified,
+        debit_account_no,
+        user_id,
+        trade_type,
+        trade_amount,
+        status,
+        out_biz_no,
+        biz_time,
+        biz_date,
+        account_type,
+        currency
+        FROM
+        account_order
+        WHERE
+        id = #{id}
+    </select>
+
+    <!-- 查询交易信息通过ID -->
+    <select id="getByOutBizNo" resultMap="BaseResultMap">
+        SELECT
+        id,
+        tnt_inst_id,
+        gmt_create,
+        gmt_modified,
+        debit_account_no,
+        user_id,
+        trade_type,
+        trade_amount,
+        status,
+        out_biz_no,
+        biz_time,
+        biz_date,
+        account_type,
+        currency
+        FROM
+        account_order
+        WHERE
+        out_biz_no = #{outBizNo}
+    </select>
+
+    <!-- 插入交易信息 -->
+    <insert id="insertAccountOrder" parameterType="com.example.model.AccountOrder">
+        INSERT INTO account_order (tnt_inst_id, debit_account_no, user_id, trade_type, trade_amount, status, out_biz_no, biz_time, biz_date, account_type, currency)
+        VALUES (#{tntInstId}, #{debitAccountNo}, #{userId}, #{tradeType}, #{tradeAmount}, #{status}, #{outBizNo}, #{bizTime}, #{bizDate}, #{accountType}, #{currency})
+    </insert>
+
+    <!-- 更新交易信息 -->
+    <update id="updateAccountOrder" parameterType="com.example.model.AccountOrder">
+        UPDATE account_order
+        SET
+        tnt_inst_id = #{tntInstId},
+        debit_account_no = #{debitAccountNo},
+        user_id = #{userId},
+        trade_type = #{tradeType},
+        trade_amount = #{tradeAmount},
+        status = #{status},
+        out_biz_no = #{outBizNo},
+        biz_time = #{bizTime},
+        biz_date = #{bizDate},
+        account_type = #{accountType},
+        currency = #{currency},
+        gmt_modified = CURRENT_TIMESTAMP
+        WHERE
+        id = #{id}
+    </update>
+
+    <!-- 删除交易信息 -->
+    <delete id="deleteAccountOrderById">
+        DELETE FROM account_order WHERE id = #{id}
+    </delete>
+
+</mapper>

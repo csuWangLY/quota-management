@@ -4,10 +4,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 @Data // 自动生成 Getter、Setter、toString、equals 和 hashCode 方法
 @NoArgsConstructor // 自动生成无参构造方法
 @AllArgsConstructor // 自动生成全参构造方法
-public class QuotaAccount {
+public class User {
     /**
      * 自增id
      */
@@ -21,50 +24,30 @@ public class QuotaAccount {
     /**
      * 创建日期
      */
-    private java.sql.Timestamp gmtCreate;
+    private Timestamp gmtCreate;
 
     /**
      * 修改时间
      */
-    private java.sql.Timestamp gmtModified;
+    private Timestamp gmtModified;
 
     /**
-     * 账号
+     * 账户名
      */
-    private String accountNo;
+    private String name;
 
     /**
-     * 账户类型
+     * 邮箱
      */
-    private String accountType;
+    private String email;
 
     /**
-     * 用户id
-     */
-    private Long userId;
-
-    /**
-     * 状态
+     * 账户状态
      */
     private String status;
 
     /**
-     * 币种
+     * 额度账户
      */
-    private String currency;
-
-    /**
-     * 额度上限
-     */
-    private Long quotaUpperLimit;
-
-    /**
-     * 已使用额度
-     */
-    private Long usedQuota;
-
-    /**
-     * 剩余额度
-     */
-    private Long reserveQuota;
+    private List<QuotaAccount> quotaAccountList;
 }

@@ -1,9 +1,9 @@
 package com.project.quotamanagement.quotamanagement.service.impl;
 
-import com.project.quotamanagement.quotamanagement.dao.QuotaAccountDao;
-import com.project.quotamanagement.quotamanagement.dao.UserAccountDao;
+import com.project.quotamanagement.quotamanagement.mapper.QuotaAccountMapper;
+import com.project.quotamanagement.quotamanagement.mapper.UserMapper;
 import com.project.quotamanagement.quotamanagement.model.QuotaAccount;
-import com.project.quotamanagement.quotamanagement.model.UserAccount;
+import com.project.quotamanagement.quotamanagement.model.User;
 import com.project.quotamanagement.quotamanagement.service.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,16 +15,15 @@ import java.util.Objects;
 public class UserAccountRepositoryImpl implements UserAccountRepository {
 
     @Autowired
-    private UserAccountDao userAccountDao;
+    private UserMapper userMapper;
 
     @Autowired
-    private QuotaAccountDao quotaAccountDao;
-
+    private QuotaAccountMapper quotaAccountMapper;
 
     @Override
-    public UserAccount accountQuery(long userAccountId, String quotaAccountType) {
-        UserAccount userAccount = userAccountDao.queryAccount(userAccountId);
-        List<QuotaAccount> quotaAccountList = quotaAccountDao.queryQuotaAccount(userAccountId, quotaAccountType);
+    public User userQuery(long userId, String quotaAccountType) {
+        User userAccount = userMapper.getUserById(userId);
+        List<QuotaAccount> quotaAccountList = quotaAccountMapper.queryByCondition(userId, quotaAccountType);
 
         if (Objects.isNull(userAccount)) {
             return null;

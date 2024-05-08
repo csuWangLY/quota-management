@@ -1,14 +1,16 @@
-package com.project.quotamanagement.quotamanagement.model;
+package com.project.quotamanagement.quotamanagement.controller.vo;
 
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaAccountVO;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
-public class UserAccount {
+@ToString
+public class UserVO {
 
     /**
      * 账户id
@@ -28,6 +30,6 @@ public class UserAccount {
     /**
      * 额度账户列表
      */
-    private List<QuotaAccount> quotaAccountList;
+    private List<QuotaAccountVO> quotaAccountVOList;
 
 }
