@@ -9,7 +9,7 @@ public interface AccountOrderService {
      *
      * @param order 单据
      */
-    void createAccountOrder(AccountOrder order);
+    void createAccountOrder(AccountOrder order) throws Exception;
 
     /**
      * 幂等判断

@@ -19,3 +19,6 @@ CREATE TABLE `account_order` (
   `currency` varchar(16) DEFAULT NULL COMMENT '币种',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='交易信息表';
+
+ALTER TABLE account_order
+ADD CONSTRAINT constraint_name UNIQUE (out_biz_no);
