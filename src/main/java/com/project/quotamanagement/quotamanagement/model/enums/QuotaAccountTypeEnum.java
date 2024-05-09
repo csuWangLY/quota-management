@@ -29,7 +29,7 @@ public enum QuotaAccountTypeEnum  implements BaseEnum {
 
     public static QuotaAccountTypeEnum getByCode(String code) {
         for (QuotaAccountTypeEnum accountTypeEnum : values()) {
-            if (accountTypeEnum.equals(code)) {
+            if (accountTypeEnum.getCode().equals(code)) {
                 return accountTypeEnum;
             }
         }
