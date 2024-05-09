@@ -8,4 +8,6 @@ public interface AccountOrderDOMapper {
 
     // 通过外部单号查询
     AccountOrderDO getByOutBizNo(String outBizNo);
+
+    int insert(AccountOrderDO record);
 }

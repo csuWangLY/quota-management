@@ -1,5 +1,6 @@
 package com.project.quotamanagement.quotamanagement.controller.vo;
 
+import com.project.quotamanagement.quotamanagement.controller.vo.base.BaseRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,7 +8,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-public class ReleaseQuotaRequest {
+public class ReleaseQuotaRequest extends BaseRequest {
     /**
      * 用户id
      */

@@ -4,6 +4,7 @@ import com.project.quotamanagement.quotamanagement.controller.vo.OccupiedQuotaRe
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaApplyRequest;
 import com.project.quotamanagement.quotamanagement.controller.vo.ReleaseQuotaRequest;
 import com.project.quotamanagement.quotamanagement.controller.vo.base.CommonResult;
+import com.project.quotamanagement.quotamanagement.model.enums.QuotaAccountTypeEnum;
 import com.project.quotamanagement.quotamanagement.service.QuotaCommandService;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class QuotaManagementCommandController extends CommonController {
     @RequestMapping(value = "/occupiedQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> occupiedQuota(OccupiedQuotaRequest request) {
 
-        LOGGER.info("开始额度占用");
+        LOGGER.info("开始额度占用，账号 = {}， 占用额度 = {}", request.getAccountNo(), request.getOccupiedQuota());
 
         CommonResult result = new CommonResult();
 
@@ -71,7 +72,7 @@ public class QuotaManagementCommandController extends CommonController {
     @RequestMapping(value = "/releaseQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> releaseQuota(ReleaseQuotaRequest request) {
 
-        LOGGER.info("开始额度释放");
+        LOGGER.info("开始额度释放，账号 = {}， 释放额度 = {}", request.getAccountNo(), request.getReleaseQuota());
 
         CommonResult result = new CommonResult();
 
@@ -105,7 +106,7 @@ public class QuotaManagementCommandController extends CommonController {
     @RequestMapping(value = "/applyQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> applyQuota(QuotaApplyRequest request) {
 
-        LOGGER.info("开始额度申请");
+        LOGGER.info("开始额度申请，账号 = {}，账户类型 = {}， 申请额度 = {}", request.getAccountNo(), request.getQuotaAccountType(), request.getTotalQuota());
 
         CommonResult result = new CommonResult();
 
@@ -113,7 +114,7 @@ public class QuotaManagementCommandController extends CommonController {
             @Override
             public void check() throws Exception {
                 // 请求校验、鉴权
-                if (request.getTotalQuota() <= 0 || request.getUserId() <= 0 || Strings.isBlank(request.getAccountNo()) || Strings.isBlank(request.getQuotaAccountType())) {
+                if (request.getTotalQuota() <= 0 || request.getUserId() <= 0 || Strings.isBlank(request.getAccountNo()) || Strings.isBlank(request.getQuotaAccountType()) || QuotaAccountTypeEnum.getByCode(request.getQuotaAccountType()) == null) {
                     throw new Exception("请求字段不合法");
                 }
             }

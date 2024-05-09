@@ -21,6 +21,18 @@
     id, tnt_inst_id, gmt_create, gmt_modified, debit_account_no, user_id, trade_type, 
     trade_amount, status, out_biz_no, biz_time, biz_date, account_type, currency
   </sql>
+  <insert id="insert" parameterType="com.project.quotamanagement.quotamanagement.mapper.dos.AccountOrderDO">
+    insert into account_order (id, tnt_inst_id, gmt_create,
+    gmt_modified, debit_account_no, user_id,
+    trade_type, trade_amount, status,
+    out_biz_no, biz_time, biz_date,
+    account_type, currency)
+    values (#{id,jdbcType=BIGINT}, #{tntInstId,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP},
+    #{gmtModified,jdbcType=TIMESTAMP}, #{debitAccountNo,jdbcType=VARCHAR}, #{userId,jdbcType=BIGINT},
+    #{tradeType,jdbcType=VARCHAR}, #{tradeAmount,jdbcType=BIGINT}, #{status,jdbcType=VARCHAR},
+    #{outBizNo,jdbcType=VARCHAR}, #{bizTime,jdbcType=TIMESTAMP}, #{bizDate,jdbcType=TIMESTAMP},
+    #{accountType,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR})
+  </insert>
   <select id="getByOutBizNo" resultMap="BaseResultMap">
     SELECT
     id,
