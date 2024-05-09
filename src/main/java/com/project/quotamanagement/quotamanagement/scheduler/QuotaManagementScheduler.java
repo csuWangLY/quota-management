@@ -53,7 +53,7 @@ public class QuotaManagementScheduler {
         request.setUserId(1);
         request.setAccountNo("10001");
         request.setOccupiedQuota(current % 20 + (long) (Math.random() * 10));
-        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)));
+        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
         request.setOperatorId("wly");
 
         quotaManagementCommandController.occupiedQuota(request);
@@ -71,7 +71,7 @@ public class QuotaManagementScheduler {
         request.setUserId(1);
         request.setAccountNo("10001");
         request.setReleaseQuota(current % 20 + (long) (Math.random() * 10));
-        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)));
+        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
         request.setOperatorId("wly");
 
         quotaManagementCommandController.releaseQuota(request);
