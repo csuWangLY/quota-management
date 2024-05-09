@@ -6,7 +6,6 @@ import com.project.quotamanagement.quotamanagement.mapper.dos.QuotaAccountDO;
 import com.project.quotamanagement.quotamanagement.mapper.dos.UserDO;
 import com.project.quotamanagement.quotamanagement.model.AccountOrder;
 import com.project.quotamanagement.quotamanagement.model.QuotaAccount;
-import com.project.quotamanagement.quotamanagement.model.User;
 import com.project.quotamanagement.quotamanagement.model.constants.QuotaManagementConstants;
 import com.project.quotamanagement.quotamanagement.model.enums.AccountOrderStatusEnum;
 import com.project.quotamanagement.quotamanagement.model.enums.AccountOrderTypeEnum;
@@ -14,6 +13,8 @@ import com.project.quotamanagement.quotamanagement.model.enums.QuotaAccountStatu
 import com.project.quotamanagement.quotamanagement.service.AccountOrderService;
 import com.project.quotamanagement.quotamanagement.service.QuotaCommandService;
 import com.project.quotamanagement.quotamanagement.util.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,8 @@ import java.util.Objects;
 @Service
 public class QuotaCommandServiceImpl implements QuotaCommandService {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(QuotaCommandServiceImpl.class);
+
     @Autowired
     private UserDOMapper userDOMapper;
 
@@ -36,13 +39,14 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
     private AccountOrderService accountOrderService;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     public void applyQuota(long userId, String quotaAccountType, long totalQuota, String accountNo) throws Exception {
 
         // 锁账户
         UserDO userDO = userDOMapper.lockById(userId);
 
         if (Objects.isNull(userDO)) {
+            LOGGER.error("传入的用户id无效");
             throw new Exception("传入的用户id无效");
         }
 
@@ -57,6 +61,7 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
 
             // 检查是否是该用户的账户
             if (quotaAccountDO.getUserId() != userId) {
+                LOGGER.error("该账户和用户id不匹配！");
                 throw new Exception("该账户和用户id不匹配！");
             }
 
@@ -67,10 +72,12 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     public void occupiedQuota(long userId, String accountNo, long usedQuota, String outBizNo) throws Exception {
         // 幂等判断
         if (accountOrderService.judgeIdempotent(outBizNo)) {
+            LOGGER.info("幂等，直接返回成功");
+
             // 幂等，直接返回成功
             return;
         }
@@ -79,10 +86,12 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         QuotaAccount quotaAccount = lockQuotaAccount(accountNo);
 
         if (usedQuota > quotaAccount.getReserveQuota()) {
+            LOGGER.error("此次消费额度大于可用额度，交易失败");
             throw new Exception("此次消费额度大于可用额度，交易失败");
         }
 
-        quotaAccount.setReserveQuota(quotaAccount.getReserveQuota() + usedQuota);
+        quotaAccount.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
+        quotaAccount.setReserveQuota(quotaAccount.getReserveQuota() - usedQuota);
         quotaAccount.setUsedQuota(quotaAccount.getUsedQuota() + usedQuota);
 
         updateQuotaAccount(quotaAccount);
@@ -92,7 +101,7 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     public void releaseQuota(long userId, String accountNo, long restoredQuota, String outBizNo) throws Exception {
         // 幂等判断
         if (accountOrderService.judgeIdempotent(outBizNo)) {
@@ -105,9 +114,11 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
 
 
         if (restoredQuota > quotaAccount.getUsedQuota()) {
+            LOGGER.error("此次释放额度大于已占用额度，交易失败");
             throw new Exception("此次释放额度大于已占用额度，交易失败");
         }
 
+        quotaAccount.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
         quotaAccount.setUsedQuota(quotaAccount.getUsedQuota() - restoredQuota);
         quotaAccount.setReserveQuota(quotaAccount.getReserveQuota() + restoredQuota);
 
@@ -124,6 +135,8 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
         LocalDateTime currentDate = LocalDateTime.now();
 
         accountOrder.setTntInstId(QuotaManagementConstants.DEFAULT_TNT_INST_ID);
+        accountOrder.setGmtCreate(Timestamp.valueOf(LocalDateTime.now()));
+        accountOrder.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
         accountOrder.setAccountNo(quotaAccount.getAccountNo());
         accountOrder.setUserId(quotaAccount.getUserId());
         accountOrder.setTradeType(accountOrderType.getCode());
@@ -159,6 +172,7 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
             throw new Exception("额度账户调额度失败，已占用额度大于调整后总额度");
         }
 
+        quotaAccount.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
         quotaAccount.setQuotaUpperLimit(totalQuota);
         quotaAccount.setReserveQuota(totalQuota - quotaAccount.getUsedQuota());
 
@@ -177,6 +191,8 @@ public class QuotaCommandServiceImpl implements QuotaCommandService {
 
         QuotaAccountDO quotaAccount = new QuotaAccountDO();
         quotaAccount.setTntInstId(QuotaManagementConstants.DEFAULT_TNT_INST_ID);
+        quotaAccount.setGmtCreate(Timestamp.valueOf(LocalDateTime.now()));
+        quotaAccount.setGmtModified(Timestamp.valueOf(LocalDateTime.now()));
         quotaAccount.setAccountNo(accountNo);
         quotaAccount.setAccountType(quotaAccountType);
         quotaAccount.setUserId(userId);

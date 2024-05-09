@@ -25,11 +25,11 @@ public enum AccountOrderStatusEnum implements BaseEnum {
 
     @Override
     public String getCode() {
-        return null;
+        return this.code;
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return this.description;
     }
 }

@@ -6,6 +6,8 @@ import com.project.quotamanagement.quotamanagement.controller.vo.ReleaseQuotaReq
 import com.project.quotamanagement.quotamanagement.controller.vo.base.CommonResult;
 import com.project.quotamanagement.quotamanagement.service.QuotaCommandService;
 import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/command")
 public class QuotaManagementCommandController extends CommonController {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(QuotaManagementCommandController.class);
+
     @Autowired
     private QuotaCommandService quotaCommandService;
 
@@ -33,7 +37,11 @@ public class QuotaManagementCommandController extends CommonController {
     @RequestMapping(value = "/occupiedQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> occupiedQuota(OccupiedQuotaRequest request) {
 
-        CommonResult result = execute(new ControllerTemplate() {
+        LOGGER.info("开始额度占用");
+
+        CommonResult result = new CommonResult();
+
+        execute(new ControllerTemplate() {
             @Override
             public void check() throws Exception {
                 // 请求校验、鉴权
@@ -46,7 +54,9 @@ public class QuotaManagementCommandController extends CommonController {
             public void execute() throws Exception {
                 quotaCommandService.occupiedQuota(request.getUserId(), request.getAccountNo(), request.getOccupiedQuota(), request.getOutBizNo());
             }
-        });
+        }, result);
+
+        LOGGER.info("结束额度占用");
 
         return ResponseEntity.ok(result);
     }
@@ -61,7 +71,11 @@ public class QuotaManagementCommandController extends CommonController {
     @RequestMapping(value = "/releaseQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> releaseQuota(ReleaseQuotaRequest request) {
 
-        CommonResult result = execute(new ControllerTemplate() {
+        LOGGER.info("开始额度释放");
+
+        CommonResult result = new CommonResult();
+
+        execute(new ControllerTemplate() {
             @Override
             public void check() throws Exception {
                 // 请求校验、鉴权
@@ -72,9 +86,11 @@ public class QuotaManagementCommandController extends CommonController {
 
             @Override
             public void execute() throws Exception {
-                quotaCommandService.releaseQuota(request.getUserAccountId(), request.getAccountNo(), request.getReleaseQuota(), request.getOutBizNo());
+                quotaCommandService.releaseQuota(request.getUserId(), request.getAccountNo(), request.getReleaseQuota(), request.getOutBizNo());
             }
-        });
+        }, result);
+
+        LOGGER.info("结束额度释放");
 
         return ResponseEntity.ok(result);
     }
@@ -88,7 +104,12 @@ public class QuotaManagementCommandController extends CommonController {
     @ResponseBody
     @RequestMapping(value = "/applyQuota", method = RequestMethod.POST)
     public ResponseEntity<CommonResult> applyQuota(QuotaApplyRequest request) {
-        CommonResult result = execute(new ControllerTemplate() {
+
+        LOGGER.info("开始额度申请");
+
+        CommonResult result = new CommonResult();
+
+        execute(new ControllerTemplate() {
             @Override
             public void check() throws Exception {
                 // 请求校验、鉴权
@@ -101,7 +122,9 @@ public class QuotaManagementCommandController extends CommonController {
             public void execute() throws Exception {
                 quotaCommandService.applyQuota(request.getUserId(), request.getQuotaAccountType(), request.getTotalQuota(), request.getAccountNo());
             }
-        });
+        }, result);
+
+        LOGGER.info("结束额度申请");
 
         return ResponseEntity.ok(result);
     }

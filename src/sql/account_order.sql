@@ -5,8 +5,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 CREATE TABLE `account_order` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
   `tnt_inst_id` varchar(32) DEFAULT NULL COMMENT '租户id',
-  `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
-  `gmt_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
+  `gmt_create` timestamp DEFAULT CURRENT_TIMESTAMP NULL COMMENT '创建日期',
+  `gmt_modified` timestamp  DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NULL COMMENT '修改时间',
   `debit_account_no` varchar(64) DEFAULT NULL COMMENT '出款账号',
   `user_id` bigint unsigned DEFAULT NULL COMMENT '用户id',
   `trade_type` varchar(32) DEFAULT NULL COMMENT '交易类型',

@@ -16,7 +16,7 @@ public class QuotaQueryRequest extends BaseRequest {
     /**
      * 用户id
      */
-    private long userAccountId;
+    private long userId;
 
     /**
      * 额度账户类型

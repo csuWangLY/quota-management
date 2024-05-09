@@ -11,7 +11,7 @@ public class ReleaseQuotaRequest {
     /**
      * 用户id
      */
-    private long userAccountId;
+    private long userId;
 
     /**
      * 额度账户类型

@@ -175,9 +175,7 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-
-  <!-- 根据条件查询额度账户信息 -->
-  <select id="queryByCondition" parameterType="java.util.Map" resultType="com.example.model.QuotaAccount">
+  <select id="queryByCondition" parameterType="java.util.Map" resultMap="BaseResultMap">
     SELECT
     id,
     tnt_inst_id,
@@ -194,15 +192,12 @@
     FROM
     quota_account
     WHERE
-    <if test="userId != null">
-      user_id = #{userId}
-    </if>
+    user_id = #{userId}
     <if test="quotaAccountType != null">
       AND account_type = #{quotaAccountType}
     </if>
   </select>
 
-  <!-- 查询额度账户信息通过ID -->
   <select id="lockByAccountNo" resultMap="BaseResultMap">
     SELECT
     id,

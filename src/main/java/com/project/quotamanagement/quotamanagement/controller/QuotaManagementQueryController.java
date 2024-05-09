@@ -3,6 +3,9 @@ package com.project.quotamanagement.quotamanagement.controller;
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaQueryRequest;
 import com.project.quotamanagement.quotamanagement.controller.vo.QuotaQueryResponse;
 import com.project.quotamanagement.quotamanagement.controller.vo.UserVO;
+import com.project.quotamanagement.quotamanagement.controller.vo.base.CommonResult;
+import com.project.quotamanagement.quotamanagement.mapper.dos.UserDO;
+import com.project.quotamanagement.quotamanagement.model.User;
 import com.project.quotamanagement.quotamanagement.model.converter.UserAccountConverter;
 import com.project.quotamanagement.quotamanagement.service.UserAccountRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -15,13 +18,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Objects;
+
 
 /**
  * 额度管理查询模块
  */
 @Controller
 @RequestMapping("/query")
-public class QuotaManagementQueryController {
+public class QuotaManagementQueryController extends CommonController  {
 
     private static Logger LOGGER = LoggerFactory.getLogger(QuotaManagementQueryController.class);
 
@@ -39,19 +44,26 @@ public class QuotaManagementQueryController {
     public ResponseEntity<QuotaQueryResponse> quotaQuery(QuotaQueryRequest request) {
         QuotaQueryResponse result = new QuotaQueryResponse();
 
-        // 请求校验
-        if (!quotaQueryRequestCheck(request)) {
-            result.setSuccess(false);
-            result.setRetriable(false);
-            return ResponseEntity.ok(result);
-        }
+        execute(new ControllerTemplate() {
+            @Override
+            public void check() throws Exception {
+                // 请求校验
+                if (!quotaQueryRequestCheck(request)) {
+                    throw new Exception("参数校验失败");
+                }
+            }
 
-        LOGGER.info("额度查询开始，查询账户id = {}", request.getUserAccountId());
+            @Override
+            public void execute() throws Exception {
+                LOGGER.info("额度查询开始，查询账户id = {}", request.getUserId());
 
-        // 查询
-        UserVO userVO = UserAccountConverter.model2vo(
-                userAccountRepository.userQuery(request.getUserAccountId(), request.getQuotaAccountType()));
-        result.setUserVO(userVO);
+                // 查询
+                User user = userAccountRepository.userQuery(request.getUserId(), request.getQuotaAccountType());
+                UserVO userVO = Objects.isNull(user) ? null : UserAccountConverter.model2vo(user);
+                result.setUserVO(userVO);
+
+            }
+        }, result);
 
         return ResponseEntity.ok(result);
     }
@@ -62,7 +74,7 @@ public class QuotaManagementQueryController {
      * @param request 请求
      */
     private boolean quotaQueryRequestCheck(QuotaQueryRequest request) {
-        if (request.getUserAccountId() <= 0 || Strings.isBlank(request.getOperatorId())) {
+        if (request.getUserId() <= 0 || Strings.isBlank(request.getOperatorId())) {
 
             LOGGER.error("请求不符合预期");
             return false;

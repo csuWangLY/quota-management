@@ -21,7 +21,6 @@
     id, tnt_inst_id, gmt_create, gmt_modified, debit_account_no, user_id, trade_type, 
     trade_amount, status, out_biz_no, biz_time, biz_date, account_type, currency
   </sql>
-  <!-- 查询交易信息通过ID -->
   <select id="getByOutBizNo" resultMap="BaseResultMap">
     SELECT
     id,
