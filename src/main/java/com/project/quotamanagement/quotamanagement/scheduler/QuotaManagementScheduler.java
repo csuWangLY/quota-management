@@ -39,42 +39,42 @@ public class QuotaManagementScheduler {
 
         quotaManagementCommandController.applyQuota(request);
     }
-//
-//
-//    @Async
-//    @Scheduled(cron = "* * * * * ?") //表示每秒
-//    public void asyncOccupied() {
-//        // 异步任务的具体逻辑
-//        System.out.println("asyncOccupied task executed.");
-//
-//        long current = Timestamp.valueOf(LocalDateTime.now()).getTime();
-//
-//        OccupiedQuotaRequest request = new OccupiedQuotaRequest();
-//        request.setUserId(1);
-//        request.setAccountNo("10001");
-//        request.setOccupiedQuota(current % 20 + (long) (Math.random() * 10));
-//        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
-//        request.setOperatorId("wly");
-//
-//        quotaManagementCommandController.occupiedQuota(request);
-//
-//    }
-//
-//    @Async
-//    @Scheduled(cron = "* * * * * ?") //表示每秒
-//    public void asyncRelease() {
-//        // 异步任务的具体逻辑
-//        System.out.println("asyncRelease task executed.");
-//        long current = Timestamp.valueOf(LocalDateTime.now()).getTime();
-//
-//        ReleaseQuotaRequest request = new ReleaseQuotaRequest();
-//        request.setUserId(1);
-//        request.setAccountNo("10001");
-//        request.setReleaseQuota(current % 20 + (long) (Math.random() * 10));
-//        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
-//        request.setOperatorId("wly");
-//
-//        quotaManagementCommandController.releaseQuota(request);
-//    }
+
+
+    @Async
+    @Scheduled(cron = "* * * * * ?") //表示每秒
+    public void asyncOccupied() {
+        // 异步任务的具体逻辑
+        System.out.println("asyncOccupied task executed.");
+
+        long current = Timestamp.valueOf(LocalDateTime.now()).getTime();
+
+        OccupiedQuotaRequest request = new OccupiedQuotaRequest();
+        request.setUserId(1);
+        request.setAccountNo("10001");
+        request.setOccupiedQuota(current % 20 + (long) (Math.random() * 10));
+        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
+        request.setOperatorId("wly");
+
+        quotaManagementCommandController.occupiedQuota(request);
+
+    }
+
+    @Async
+    @Scheduled(cron = "* * * * * ?") //表示每秒
+    public void asyncRelease() {
+        // 异步任务的具体逻辑
+        System.out.println("asyncRelease task executed.");
+        long current = Timestamp.valueOf(LocalDateTime.now()).getTime();
+
+        ReleaseQuotaRequest request = new ReleaseQuotaRequest();
+        request.setUserId(1);
+        request.setAccountNo("10001");
+        request.setReleaseQuota(current % 20 + (long) (Math.random() * 10));
+        request.setOutBizNo(String.valueOf(current % 20 + (long) (Math.random() * 10)) + current / 100000);
+        request.setOperatorId("wly");
+
+        quotaManagementCommandController.releaseQuota(request);
+    }
 
 }
